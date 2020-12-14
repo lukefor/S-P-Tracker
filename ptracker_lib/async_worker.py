@@ -39,14 +39,14 @@ def threadCallDecorator(f):
     return new_f
 
 class Worker(Thread):
-    def __init__(self, async):
+    def __init__(self, asyncc):
         Thread.__init__(self)
         self.daemon = True
         self.queueIn = Queue()
         self.processing = 0
         self.queueOut = Queue()
-        self.async = async
-        if async:
+        self.asyncc = asyncc
+        if asyncc:
             self.start()
 
     def run(self):
@@ -66,13 +66,13 @@ class Worker(Thread):
                 self.queueOut.put(res)
 
     def apply_async(self, f, args, kw, callback):
-        if self.async:
+        if self.asyncc:
             self.queueIn.put( (f, args, kw, callback) )
         else:
             callback(f(*args, **kw))
 
     def apply(self, f, args, kw):
-        if self.async:
+        if self.asyncc:
             self.queueIn.put( (f, args, kw, None) )
             return self.queueOut.get()
         else:

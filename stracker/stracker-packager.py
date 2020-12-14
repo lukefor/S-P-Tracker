@@ -19,43 +19,12 @@ import os, os.path
 import sys
 import traceback
 import zipfile
-import winreg
 
 sys.path.append("..")
 import ptracker_lib
 from ptracker_lib import expand_ac
 from ptracker_lib.read_ui_data import *
 
-def ac_install_dir():
-    try:
-        k = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Valve\Steam")
-        v = winreg.QueryValueEx(k, "SteamPath")
-        res = os.path.join(v[0], "SteamApps","common","assettocorsa")
-        if os.path.isdir(res) and os.path.isfile(os.path.join(res, 'AssettoCorsa.exe')):
-            print("Found using HKEY_CURRENT_USER/Software/Valve/Steam/SteamPath")
-            return res
-        print("Not found using HKEY_CURRENT_USER/Software/Valve/Steam/SteamPath")
-    except Exception as e:
-        print("Could not query HKEY_CURRENT_USER/Software/Valve/Steam/SteamPath:", str(e))
-    try:
-        k = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 244210")
-        res = winreg.QueryValueEx(k, "InstallLocation")[0]
-        if os.path.isdir(res) and os.path.isfile(os.path.join(res, 'AssettoCorsa.exe')):
-            print("Found using HKEY_LOCAL_MACHINE/SOFTWARE/Wow6432Node/Microsoft/Windows/CurrentVersion/Uninstall/Steam App 244210")
-            return res
-        print("Not found using HKEY_LOCAL_MACHINE/SOFTWARE/Wow6432Node/Microsoft/Windows/CurrentVersion/Uninstall/Steam App 244210")
-    except Exception as e:
-        print("Could not query HKEY_LOCAL_MACHINE/SOFTWARE/Wow6432Node/Microsoft/Windows/CurrentVersion/Uninstall/Steam App 244210:", str(e))
-    try:
-        k = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 244210")
-        res = winreg.QueryValueEx(k, "InstallLocation")[0]
-        if os.path.isdir(res) and os.path.isfile(os.path.join(res, 'AssettoCorsa.exe')):
-            print("Found using HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows/CurrentVersion/Uninstall/Steam App 244210")
-            return res
-        print("Not found using HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows/CurrentVersion/Uninstall/Steam App 244210")
-    except Exception as e:
-        print("Could not query HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows/CurrentVersion/Uninstall/Steam App 244210:", str(e))
-    return r"C:\Program Files (x86)\Steam\SteamApps\common\assettocorsa"
 
 def main():
     cok = 0
